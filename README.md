@@ -47,10 +47,9 @@ service cloud.firestore {
 ## 3. Ejecutar
 
 ```bash
-npm start
+ionic serve
 ```
 
-Abre la URL local que muestre Angular (habitualmente http://localhost:4200).
 
 También puedes instalar Ionic CLI (`npm install -g @ionic/cli`) y ejecutar `ionic serve`.
 
