@@ -26,8 +26,8 @@ npm install
 
 ##Reglas de firestore:
 
-```rules_version = '2';
-
+```rules_version = '2';```
+```
 service cloud.firestore {
   match /databases/{database}/documents {
 
