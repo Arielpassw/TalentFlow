@@ -24,9 +24,10 @@ npm install
 
 **Seguridad:** las reglas de demostración permiten lecturas y escrituras anónimas (creación) desde cualquier cliente. No usar datos personales reales, no publicar esta configuración en producción y restringir o eliminar las reglas al terminar la clase. Para una aplicación real, usar Firebase Authentication y reglas restrictivas.
 
-Reglas de firestore:
-rules_version = '2';
+##Reglas de firestore:
 
+```rules_version = '2';```
+```
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -42,7 +43,7 @@ service cloud.firestore {
       allow update, delete: if false;
     }
   }
-}
+}```
 
 ## 3. Ejecutar
 
