@@ -1,0 +1,235 @@
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button
+        defaultHref="/home"
+        text="Volver">
+      </ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Detalle de postulación</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- CARGANDO -->
+  <div *ngIf="cargando" class="estado-carga">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Consultando información del postulante...</p>
+  </div>
+
+  <!-- ERROR -->
+  <ion-card *ngIf="!cargando && mensajeError">
+    <ion-card-content class="estado-error">
+      <h2>No se pudo cargar la postulación</h2>
+      <p>{{ mensajeError }}</p>
+
+      <ion-button expand="block" (click)="regresar()">
+        Regresar al listado
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- DETALLE -->
+  <div *ngIf="!cargando && postulante">
+
+    <!-- ENCABEZADO DEL POSTULANTE -->
+    <ion-card class="tarjeta-perfil">
+      <ion-card-content>
+        <div class="perfil-icono">
+          <ion-icon name="person-outline"></ion-icon>
+        </div>
+
+        <h1>
+          {{ postulante.nombres }}
+          {{ postulante.apellidos }}
+        </h1>
+
+        <p class="cargo">
+          {{ postulante.cargoPostulado }}
+        </p>
+
+        <ion-chip color="success">
+          Postulación registrada
+        </ion-chip>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- DATOS PERSONALES -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="person-outline"></ion-icon>
+          Datos personales
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <ion-item lines="none">
+          <ion-icon name="mail-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h3>Correo electrónico</h3>
+            <p>{{ postulante.email }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-icon name="call-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h3>Teléfono</h3>
+            <p>{{ postulante.telefono }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-icon name="calendar-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h3>Fecha de nacimiento</h3>
+            <p>{{ postulante.fechaNacimiento | date:'dd/MM/yyyy' }}</p>
+          </ion-label>
+        </ion-item>
+
+      </ion-card-content>
+    </ion-card>
+
+    <!-- INFORMACIÓN PROFESIONAL -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="briefcase-outline"></ion-icon>
+          Información profesional
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <ion-item lines="none">
+          <ion-label>
+            <h3>Cargo al que postula</h3>
+            <p>{{ postulante.cargoPostulado }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-icon name="school-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h3>Nivel académico</h3>
+            <p>{{ postulante.nivelAcademico }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-label>
+            <h3>Experiencia laboral</h3>
+            <p>{{ postulante.experienciaLaboral }} años</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-label>
+            <h3>Modalidad de trabajo</h3>
+            <p>{{ postulante.modalidadTrabajo }}</p>
+          </ion-label>
+        </ion-item>
+
+        <div class="seccion-habilidades">
+          <h3>Habilidades técnicas</h3>
+
+          <div class="habilidades">
+            <ion-chip
+              color="primary"
+              *ngFor="let habilidad of postulante.habilidadesTecnicas">
+              {{ habilidad }}
+            </ion-chip>
+
+            <p *ngIf="!postulante.habilidadesTecnicas?.length">
+              No se registraron habilidades.
+            </p>
+          </div>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+    <!-- DISPONIBILIDAD Y ASPIRACIÓN -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          Disponibilidad y aspiración salarial
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <ion-item lines="none">
+          <ion-icon name="calendar-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h3>Fecha disponible para iniciar</h3>
+            <p>{{ postulante.fechaDisponible_inicio | date:'dd/MM/yyyy' }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-icon name="cash-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h3>Aspiración salarial</h3>
+            <p>${{ postulante.aspiracionSalarial }}</p>
+          </ion-label>
+        </ion-item>
+
+      </ion-card-content>
+    </ion-card>
+
+    <!-- RESUMEN PROFESIONAL -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          Resumen profesional
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p class="resumen">
+          {{ postulante.resumenProfesional }}
+        </p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- CONSENTIMIENTO -->
+    <ion-card>
+      <ion-card-content>
+        <div class="consentimiento">
+          <ion-icon
+            [name]="postulante.consentimientoDatos
+              ? 'checkmark-circle-outline'
+              : 'close-circle-outline'"
+            [color]="postulante.consentimientoDatos ? 'success' : 'danger'">
+          </ion-icon>
+
+          <div>
+            <h3>Consentimiento de datos personales</h3>
+            <p>
+              {{ postulante.consentimientoDatos
+                ? 'El postulante aceptó el tratamiento de sus datos personales.'
+                : 'El postulante no aceptó el tratamiento de sus datos personales.' }}
+            </p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- BOTÓN REGRESAR -->
+    <ion-button
+      expand="block"
+      fill="outline"
+      class="boton-regresar"
+      (click)="regresar()">
+      Regresar al listado
+    </ion-button>
+
+  </div>
+
+</ion-content>

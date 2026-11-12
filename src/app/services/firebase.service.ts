@@ -1,25 +1,67 @@
+
 import { Injectable } from '@angular/core';
-import { initializeApp, getApp, getApps } from 'firebase/app';
-import { addDoc, collection, getDocs, getFirestore } from 'firebase/firestore';
+
+import {
+  initializeApp,
+  getApp,
+  getApps
+} from 'firebase/app';
+
+import {
+  addDoc,
+  collection,
+  getDocs,
+  getFirestore,
+  serverTimestamp
+} from 'firebase/firestore';
+
 import { environment } from '../../environments/environment';
 
-export interface Estudiante {
-  nombre: string;
-  correo: string;
-  edad: number;
+export interface registro {
+  nombres: string;
+  apellidos: string;
+  email: string;
+  telefono: string;
+  fechaNacimiento: string;
+  cargoPostulado: string;
+  nivelAcademico: string;
+  experienciaLaboral: number;
+  modalidadTrabajo: string;
+  habilidadesTecnicas: string[];
+  fechaDisponible_inicio: string;
+  aspiracionSalarial: number;
+  resumenProfesional: string;
+  consentimientoDatos: boolean;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class FirebaseService {
-  private app = getApps().length ? getApp() : initializeApp(environment.firebase);
+
+  private app = getApps().length
+    ? getApp()
+    : initializeApp(environment.firebase);
+
+  // Base de datos: formulario
   private db = getFirestore(this.app);
 
-  guardarEstudiante(estudiante: Estudiante) {
-    return addDoc(collection(this.db, 'estudiantes'), estudiante);
+  // Colección: registro
+  private registrosRef = collection(this.db, 'registro');
+
+  async guardarRegistro(datos: registro): Promise<void> {
+    await addDoc(this.registrosRef, {
+      ...datos,
+      creadoEn: serverTimestamp()
+    });
   }
 
-  async obtenerEstudiantes(): Promise<(Estudiante & { id: string })[]> {
-    const resultado = await getDocs(collection(this.db, 'estudiantes'));
-    return resultado.docs.map(doc => ({ id: doc.id, ...(doc.data() as Estudiante) }));
+  async obtenerRegistros(): Promise<(registro & { id: string })[]> {
+    const resultado = await getDocs(this.registrosRef);
+
+    return resultado.docs.map(documento => ({
+      id: documento.id,
+      ...(documento.data() as registro)
+    }));
   }
 }
